@@ -19,6 +19,7 @@ mongoose.connection.on('error',err=>{
 });
 const PostRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 
 app.use(morgan("dev"));
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use(expressValidator());
 app.use('/',PostRoutes);
 app.use('/',authRoutes);
+app.use('/',userRoutes);
 
 
 const port = process.env.PORT || 8080;
