@@ -28,11 +28,12 @@ form.parse(req,(err,fields,files)=>{
         }
         
         let post = new Post(fields)
-        post.postedBy = req.profile
         console.log("fields are",fields)
+        post.postedBy = req.profile
         if(files.photo && fields.title && fields.body){
             post.photo.data = fs.readFileSync(files.photo.path)
             post.photo.contentType = files.photo.type
+            post.photo.name = files.photo.name
             let oldPath = files.photo.path;
             var newPath = path.join(__dirname, '../uploads') 
             + '/'+files.photo.name 
@@ -41,13 +42,15 @@ form.parse(req,(err,fields,files)=>{
                 if(err) console.log(err) 
                 return ""
             }) 
-            console.log("picture is",post.files)
+            console.log("picture is",files.photo.name)
         }
         else{
             return res.status(400).json({
                 error:"Image could not be uploaded"
             })
         }
+        post.photo.data = undefined
+        console.log("post.photo",post.photo)
         post.save((err,result)=>{
             if(err){
                 return res.status(400).json({
